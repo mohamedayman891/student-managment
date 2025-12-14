@@ -10,7 +10,7 @@ class Node {
 class StudentLinkedList {
   Node? head;
 
-  // Add student at the end
+  // Add student at the list
   void add(Student s) {
     Node newNode = Node(s);
     if (head == null) {
@@ -24,18 +24,6 @@ class StudentLinkedList {
     }
   }
 
-  // Update student by ID
-  // bool update(int id, Student newStudent) {
-  //   Node? current = head;
-  //   while (current != null) {
-  //     if (current.student.id == id) {
-  //       current.student = newStudent;
-  //       return true;
-  //     }
-  //     current = current.next;
-  //   }
-  //   return false;
-  // }
   void update(int id, Student newStudent) {
     Node? prev;
     Node? current = head;
@@ -117,7 +105,7 @@ class StudentLinkedList {
     return null;
   }
 
-  // --- SORTING BY GRADE (Descending) ---
+  // --- SORTING(Bubble) BY GRADE (Descending) ---
   void sortByGradeDesc() {
     if (head == null || head!.next == null) return;
 
@@ -131,7 +119,7 @@ class StudentLinkedList {
           Student temp = current.student;
           current.student = current.next!.student;
           current.next!.student = temp;
-          //swapped = true;
+          swapped = true;
         }
         current = current.next;
       }
@@ -140,6 +128,7 @@ class StudentLinkedList {
 
   // Get all students as List
   List<Student> getAll() {
+    // note array is List in dart
     List<Student> list = [];
     Node? current = head;
     while (current != null) {
