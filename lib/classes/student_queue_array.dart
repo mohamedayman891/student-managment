@@ -16,7 +16,6 @@ class StudentQueue {
   void enqueue(Student student) {
     if (isFull()) {
       print("Queue is full");
-      return;
     }
     rear = (rear + 1) % capacity;
     queue[rear] = student;

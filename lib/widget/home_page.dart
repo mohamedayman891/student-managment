@@ -12,6 +12,18 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<Offset> slidingAnimation;
+  void initSlidingAnimation() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+    slidingAnimation = Tween<Offset>(
+      begin: Offset(0, 5),
+      end: Offset.zero,
+    ).animate(animationController);
+    animationController.forward();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -31,88 +43,65 @@ class _HomePageState extends State<HomePage>
         Positioned.fill(
           child: Image.asset("assets/image/NMU.jpg", fit: BoxFit.fill),
         ),
+        const SizedBox(height: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 4),
-            SlidingText(slidingAnimation: slidingAnimation),
+            AnimatedBuilder(
+              animation: slidingAnimation,
+              builder: (context, _) {
+                return SlideTransition(
+                  position: slidingAnimation,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 130),
+                      Card(
+                        color: Colors.white,
+                        child: const Text(
+                          "Welcome",
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Pacifico',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 180),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return StudentScreen();
+                                },
+                              ),
+                            );
+                          },
+                          child: Card(
+                            color: Colors.blue,
+                            child: const Text(
+                              "GO to Sysytem",
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Pacifico',
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ],
-    );
-  }
-
-  void initSlidingAnimation() {
-    animationController = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2),
-    );
-    slidingAnimation = Tween<Offset>(
-      begin: Offset(0, 5),
-      end: Offset.zero,
-    ).animate(animationController);
-    animationController.forward();
-  }
-}
-
-class SlidingText extends StatelessWidget {
-  const SlidingText({super.key, required this.slidingAnimation});
-
-  final Animation<Offset> slidingAnimation;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: slidingAnimation,
-      builder: (context, _) {
-        return SlideTransition(
-          position: slidingAnimation,
-          child: Column(
-            children: [
-              const SizedBox(height: 130),
-              Card(
-                color: Colors.white,
-                child: const Text(
-                  "Welcome",
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Pacifico',
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 180),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return StudentScreen();
-                        },
-                      ),
-                    );
-                  },
-                  child: Card(
-                    color: Colors.blue,
-                    child: const Text(
-                      "GO to Sysytem",
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Pacifico',
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

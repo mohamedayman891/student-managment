@@ -38,7 +38,7 @@ class StudentLinkedList {
 
         // لو الترتيب يحتاج تغيير
         if ((prev != null && prev.student.grade < current.student.grade) ||
-            (prev == null && head!.student.grade < current.student.grade)) {
+            prev == null && head!.student.grade < current.student.grade) {
           // إزالة Node الحالي من مكانه
           if (prev != null) {
             prev.next = current.next;
@@ -61,7 +61,7 @@ class StudentLinkedList {
     if (head == null || head!.student.grade < node.student.grade) {
       node.next = head;
       head = node;
-      return;
+      // return;
     }
 
     Node? current = head;

@@ -48,10 +48,11 @@ class _StudentScreenState extends State<StudentScreen> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text(
-            "Management Students",
+            " Students Management",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
           centerTitle: true,
+          backgroundColor: Colors.deepPurpleAccent,
         ),
         body: Form(
           key: formkey,
@@ -101,7 +102,7 @@ class _StudentScreenState extends State<StudentScreen> {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            _searchStudent();
+                            searchStudent();
                             showUndo = false;
                             list.sortByGradeDesc();
                             searchCtrl.clear();
@@ -158,9 +159,8 @@ class _StudentScreenState extends State<StudentScreen> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Enter grade";
-                      if (int.tryParse(value) == null) {
-                        return "Enter a valid number";
+                      if (value == null || value.isEmpty) {
+                        return "Enter grade";
                       }
                       return null;
                     },
@@ -188,9 +188,6 @@ class _StudentScreenState extends State<StudentScreen> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) return "Enter age";
-                      if (int.tryParse(value) == null) {
-                        return "Enter a valid number";
-                      }
                       return null;
                     },
                   ),
@@ -217,9 +214,6 @@ class _StudentScreenState extends State<StudentScreen> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     validator: (value) {
                       if (value == null || value.isEmpty) return "Enter ID";
-                      if (int.tryParse(value) == null) {
-                        return "Enter a valid number";
-                      }
                       return null;
                     },
                   ),
@@ -298,7 +292,7 @@ class _StudentScreenState extends State<StudentScreen> {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () {
-                            // 1️⃣ احصل على أول عنصر اتضاف (أول عنصر في Hive)
+                            // 1️⃣ (أول عنصر في Hive)
                             final firstStudent = studentsBox.getAt(0);
 
                             if (firstStudent != null) {
@@ -319,9 +313,15 @@ class _StudentScreenState extends State<StudentScreen> {
                   ),
 
                   SizedBox(height: 10),
-                  Text(
-                    "Students:",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  Card(
+                    color: Colors.deepOrange,
+                    child: Text(
+                      " Students: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
+                    ),
                   ),
                   ListView.builder(
                     shrinkWrap: true,
@@ -329,32 +329,56 @@ class _StudentScreenState extends State<StudentScreen> {
                     itemCount: list.getAll().length,
                     itemBuilder: (context, index) {
                       final student = list.getAll()[index];
-                      return ListTile(
-                        onTap: () {
-                          selectedStudent = student;
-
-                          nameCtrl.text = student.name;
-                          gradeCtrl.text = student.grade.toString();
-                          ageCtrl.text = student.age.toString();
-                          idCtrl.text = student.id.toString();
-                          showUndo = false;
-                          setState(() {});
-                        },
-
-                        title: Text(
-                          "${student.name} -- Grade: ${student.grade}",
-                        ),
-                        subtitle: Text(
-                          "Age: ${student.age} || ID: ${student.id}",
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            list.delete(student.id);
-                            deleteFromHive(student.id);
-                            list.sortByGradeDesc();
+                      return Card(
+                        color: Colors.purpleAccent,
+                        child: ListTile(
+                          onTap: () {
+                            selectedStudent = student;
+                            nameCtrl.text = student.name;
+                            gradeCtrl.text = student.grade.toString();
+                            ageCtrl.text = student.age.toString();
+                            idCtrl.text = student.id.toString();
+                            showUndo = false;
                             setState(() {});
                           },
+                          minLeadingWidth: 100,
+                          leading: Text(
+                            student.name,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          title: Text(
+                            "Grade: ${student.grade}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Age: ${student.age} || ID: ${student.id}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 28,
+                            ),
+                            onPressed: () {
+                              list.delete(student.id);
+                              deleteFromHive(student.id);
+                              list.sortByGradeDesc();
+                              setState(() {});
+                            },
+                          ),
                         ),
                       );
                     },
@@ -368,7 +392,7 @@ class _StudentScreenState extends State<StudentScreen> {
     );
   }
 
-  void _searchStudent() {
+  void searchStudent() {
     String name = searchCtrl.text.trim();
 
     if (name.isEmpty) {
